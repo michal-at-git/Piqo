@@ -1,0 +1,205 @@
+@charset "UTF-8";
+
+@font-face {
+ font-family: "comic";
+ src: url('ComicNeue-Light.ttf'); 
+}
+html, body {
+  font-family: "comic";
+ padding: 0px;
+ margin: 0px;
+ background-color: #c3c3c3;
+ font-size: 15px;
+ color: #227;
+ font-weight: bold;
+}
+
+::selection {
+ background: rgba(30,128,255, 0.3);
+}
+::-moz-selection {
+ background: rgba(30,128,255, 0.3);
+}
+body:-webkit-full-screen {
+
+  width: 100%;
+  height: 100%;
+}
+body:-ms-fullscreen {
+  width: auto;
+  height: auto;
+  margin: auto;
+}
+
+.paint {display: table;
+  width: 520px;
+  height: 600px;
+  background: #ddd;
+  border-radius: 5px;
+} 
+header {
+    background: #fff;
+ box-shadow: 0px 0px 4px 1px #333;
+ display: table;
+ margin: auto;
+ margin-top: 5%;
+ margin-bottom: 210px;
+ text-align: center;
+}
+header h1 {padding: 0px;
+margin: 0px;
+}
+header button {
+  margin-top: 0px;
+ margin-bottom: 15px; 
+}
+
+h2 {
+  
+  font-weight: bold;
+  color: #447;
+  text-shadow: 3px  3px 1px #ccc;
+  font-size: 27px;
+ padding: 0px;
+ margin: 0px;
+}
+#Picture {
+  cursor: cell;
+  background: #fff;
+ box-shadow: 0px 0px 4px 1px #333;
+ display: table;
+ margin: auto;
+ margin-top: 5%;
+ margin-bottom: 210px;
+}
+
+.toolbar { 
+ position: fixed; 
+ bottom: 0px;
+ display: table;
+ margin-left: 5%;
+ background: #fcf1ba;
+ padding: 2%;
+ width: 80%;
+ margin-left: 8%;
+ height: 200px;
+ border-top-left-radius: 10px;
+ border-top-right-radius: 10px;
+   box-shadow:  0px 0px 5px 1px #444;
+
+}
+
+.toolbox {
+  display: table;
+  float: left;
+  width: 250px;
+}
+
+
+/*inputs and buttons*/
+
+button, input[type=submit], input[type=color], input[type=range], select {
+  border: 0px;
+  border-radius: 3px;
+  padding: 5px;
+ background-color: #eee;
+ border: solid 2px #6fbfff;
+ box-shadow: 0px 0px 0px 2px #d0d0d0;
+ margin-top: 15px;
+}
+
+button.minimalize {
+  margin-top: -1%;
+  margin-right: -1%;
+
+  float: right;
+}
+
+button.maximalize {
+ float: right; 
+}
+
+/** ### DIALOGS.CSS */
+
+#dialog {
+ position: fixed;
+top: 0px;
+ display: none; 
+ width: 100%;
+ height: 100%;
+ margin: 0px;
+ text-align: center;
+ background: rgba(50, 50, 70, 0.3);
+}
+
+
+
+#dialog .box {
+  display: table;
+ border-radius: 10px;
+ background: #fff;
+  box-shadow: inset 0px 0px 5px 1px #444;
+   margin: 0 auto;
+margin-top: 10%;
+
+}
+
+
+#dialog h2 {
+ margin-top: 20px; 
+}
+#dialog p {
+  padding: 0px;
+}
+.init {
+ border: solid #faffbb 5px;
+
+ width: 60%; 
+ padding: 2px;
+ 
+}
+
+.scaleImage {
+ border: solid #bbffc2 5px;
+ width: 60%; 
+ padding: 2px;
+}
+
+.resizeImage {
+ border: solid #ffd3bb 5px;
+ width: 60%; 
+ padding: 2px;
+}
+.colorMixer {
+ border: solid #d1bbff 5px;
+ width: 60%; 
+ padding: 2px;
+}
+
+.exportImage {
+ border: solid #bbddff 5px;
+ width: 60%; 
+ padding: 2px;
+}
+
+.problem {
+ border: solid #ff5858 5px;
+ width: 60%; 
+ padding: 2px;
+}
+
+#mixerPreview, #exp {
+ border: solid #000 1px;
+ box-shadow: 6px 6px 0px 0px #aaa;
+ max-width: 68%;
+ max-height: 300px;
+}
+
+footer {
+ display: none; 
+ position: fixed;
+ bottom: 0px;
+ width: 80%;
+ padding-left: 10%;
+ padding-right: 10%;
+}

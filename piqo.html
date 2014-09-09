@@ -1,0 +1,78 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8" />
+  <title>Piqo - web image editor</title>
+  <script src="Dialogs.js"></script>
+  <script src="Toolbar.js"></script>
+  <script src="Picture.js"></script>
+  <script src="Piqo.js"></script>
+
+  <link rel="stylesheet" href="piqo.css" />
+  
+  <style>
+  /*init setup*/
+  .toolbar, #Picture, footer {display: none}
+  </style>
+  <meta name="description" content="Piqo - web image editor" />
+  <meta name="keywords" content="image, picture, editor, colors" />
+  <link rel="icon" type="image/png" href="icon.png" />
+  <meta name="msapplication-TileColor" content="#fcf1ba" />
+  <meta name="msapplication-TileImage" content="icon.png" />
+  <meta name="author" content="Michał T" />
+  <link rel="apple-touch-icon" href="icon.png" />
+</head>
+<body>
+<header id="header">
+  <h1><img src="logo.png" alt="logo"></h1>
+  <button onclick="launch()">Launch</button>
+</header>
+<div class="toolbar" id="toolbar">
+    <button class="minimalize" onclick="toolbar.minimalize()">&#9662;</button>
+    <button class="minimalize" onclick="piqo.fullscreen()" style="/*temp*/ margin-right: 30px;">fullscreen</button>
+
+    <section class="toolbox">
+    <h2>Brush tools</h2>
+      <p>color:
+      <input type="color" id="color" value="#000000" onchange="toolbar.changeColor()" /></p>
+      
+      <p>Line width:<br/>
+      <input type="range" min="1" max="50" step="1" id="brushSizePanel" value="10" onchange="toolbar.changeBrushSize()" /> <span id="brushSizeInfo">25px</span></p>
+      <p>brush: <select id="brush" onchange="toolbar.changeBrush()">
+	<option value="dot"> &#9899; </option>
+	<option value="line"> &#9866; </option>
+	</select></p>
+    </section>
+    <section class="toolbox">
+      <h2>Filters</h2>
+      <p><button onclick="piqo.greyscaleFilter()">greyscale</button></p>
+      <p><button onclick="piqo.invertColorsFilter()">inverted colors</button></p>
+      <p><button onclick="piqo.sepiaFilter()">sepia</button></p>
+      <p><button onclick="dialogs.colorMixerDialog(piqo)">color mixer</button></p>
+
+    </section>
+    <section class="toolbox">
+      <h2>Image properties</h2>
+      <p><button onclick="dialogs.scaleImageDialog()">scale image</button></p>
+      <p><button onclick="dialogs.exportImageDialog(piqo)">export image</button></p>
+
+    </section>
+</div> 
+<div id="dialog">
+</div> 
+  <canvas id="Picture" width="0" height="0">
+  </canvas>
+
+ 
+     
+ <script>
+//   dialogs = new Dialogs();
+//   toolbar = new Toolbar();
+//   piqo = new Piqo(dialogs, toolbar);
+  
+
+  </script>
+
+    
+<footer id="footer"><button class="maximalize" onclick="toolbar.maximalize()">&#9652;</button></footer>
+ 
+</body>
