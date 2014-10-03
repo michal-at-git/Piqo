@@ -94,11 +94,13 @@ h2 {
   float: left;
   width: 250px;
 }
-
+.toolbox h3 {
+display: none;
+}
 
 /*inputs and buttons*/
 
-button, input[type=submit], input[type=color], input[type=range], select {
+button, input[type=submit], input[type=color], input[type=range],  select {
   border: 0px;
   border-radius: 3px;
   padding: 5px;
@@ -118,7 +120,15 @@ button.minimalize {
 button.maximalize {
  float: right; 
 }
-
+.paintingToolSelect p {
+ margin-top: 5px;
+ margin-bottom: 0px;
+ padding: 0px;
+}
+#shapeSelector {
+ font-size: 25px; 
+}
+#shape_tools h4 {display: none}
 /** ### DIALOGS.CSS */
 
 #dialog {
@@ -202,4 +212,19 @@ footer {
  width: 80%;
  padding-left: 10%;
  padding-right: 10%;
+}
+
+/* painting tools */
+
+#circleShape, #rectangleShape, #triangleShape, #starShape {
+ display: none;
+}
+
+#circleShape p, #rectangleShape p, #triangleShape p, #starShape p {
+  padding:0px;
+ margin-top: 10px; 
+ margin-bottom: 0px;
+}
+#circleShape p input[type=range], #rectangleShape p input[type=range], #triangleShape p input[type=range] {
+ margin-top: 4px; 
 }

@@ -104,7 +104,6 @@ this.generateRGBPreview = function(piqo) {
     var raw = piqo.pic.context.getImageData(0,0, piqo.canvas.width, piqo.canvas.height); 
   
     var d = raw.data;
-//     alert(colRed);
       for(var i = 0; i<d.length; i+=4){
 	if(d[i] >= 64 && colRed>0) {
 	    d[i]   += colRed;   /*r*/

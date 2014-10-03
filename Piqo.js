@@ -1,3 +1,7 @@
+function newPic() {
+ window.piqo.clear();
+ launch();
+}
 function launch() {
   window.dialogs = new Dialogs();
   window.toolbar = new Toolbar();
@@ -17,7 +21,9 @@ var Piqo = function(dialogs, toolbar) {
   this.pic;
   this.canvas;
   this.toolbar = toolbar;
-  
+  this.mode = "brush";
+  //setting on Toolbar 
+  toolbar.showPaintingBrushPanel();
   this.create = function() {
     var width = document.getElementById("imgWidth").value;
     var height = document.getElementById("imgHeight").value;
@@ -32,6 +38,16 @@ var Piqo = function(dialogs, toolbar) {
     this.pic.context.fill();
     
   } 
+
+  this.setMode = function(mode) {
+   this.mode=mode; 
+    if(mode == 'shape')
+      toolbar.showPaintingShapePanel();
+    else if(mode == 'brush')
+      toolbar.showPaintingBrushPanel();
+  
+   paintInit(this);
+  }
   
   this.createFromImage = function() {
     imageInput = document.getElementById("imageUpload");
@@ -53,26 +69,175 @@ var Piqo = function(dialogs, toolbar) {
 
   }
 
-  
+  this.clear = function() {
+    this.pic.context.clearRect(0,0, canvas.width, canvas.height);
+    this.pic.context.fillStyle = toolbar.circleFillColor;
+    this.pic.context.fillStyle = '#ffffff';
+    this.pic.context.fill(); 
+  }
  
   this.draw = function(event) {
+
+      
+	var xy = event.pageX - this.pic.canvas.offsetLeft;
+	var yy = event.pageY - this.pic.canvas.offsetTop;
+	
+
+	this.pic.context.lineTo(xy+1, yy+1);
+	this.pic.context.lineWidth = this.toolbar.brushSize;
+	this.pic.context.strokeStyle =  this.toolbar.color;
+	
+	if(this.toolbar.brush == "dot") 
+ 	  this.pic.context.lineCap = 'round';
+ 	else this.pic.context.lineCap = 'square';
+	
+	this.pic.context.stroke();
+  }
+ 
+ 
+  this.delayedDraw = function(event) {
+
+    var xy = event.pageX - this.pic.canvas.offsetLeft;
+    var yy = event.pageY - this.pic.canvas.offsetTop;
+    this.pic.context.beginPath();
+    this.pic.context.moveTo(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
+
+    this.pic.context.lineTo(xy+1, yy+1);
+    this.pic.context.lineWidth = this.toolbar.brushSize;
+    this.pic.context.strokeStyle =  this.toolbar.color;
+	  
+    if(this.toolbar.brush == "dot") 
+    this.pic.context.lineCap = 'round';
+    else this.pic.context.lineCap = 'square';
+	  
+    this.pic.context.stroke();
+
+  }
+ 
+ 
+ this.drawShape = function(event) {
+      shape = document.getElementById("shapeSelector").value;
+
       rectangle = this.canvas.getBoundingClientRect(); // emuluje prostokąt pobierany z elementu przez id?
       x = event.clientX - rectangle.left;
       y = event.clientY - rectangle.top;
       
       
+      if(shape == "star") {
+	size = parseInt(document.getElementById("starSize").value);
+
+	y -= ((size/3)*2);
+
+	//top right
+	line0 = {'x': x, 'y':y}; 
+	line1 = {'x': x+(size/6), 'y': y+(size/2)}; // : \
+	line2 = {'x': x+(size*0.75), 'y': y+(size/2)}; // : _
+	line3 = {'x': x+(size*0.25), 'y': y+((size/6)*5)}; // : /
+	line4 = {'x': x+(size*0.5), 'y': y+((size/3)*4)}; // : \
+	line5 = {'x': x, 'y': y+size}; // : \
+	/// top left;
+	line6 = {'x': x-(size/6), 'y': y+(size/2)}; 
+	line7 = {'x': x-(size*0.75), 'y': y+(size/2)}; 
+	line8 = {'x': x-(size*0.25), 'y': y+((size/6)*5)};
+	line9 = {'x': x-(size*0.5), 'y': y+((size/3)*4)}; 
+	line10 = {'x': x, 'y': y+size}; // : \
+	
 	this.pic.context.beginPath();
-	this.pic.context.moveTo(x,y);
-	this.pic.context.lineTo(x+1, y+1);
-	this.pic.context.lineWidth = this.toolbar.brushSize;
-	this.pic.context.strokeStyle =  this.toolbar.color;
+	this.pic.context.moveTo(line0.x,line0.y);
+	this.pic.context.lineTo(line1.x,line1.y);
+	this.pic.context.lineTo(line2.x, line2.y);
+	this.pic.context.lineTo(line3.x, line3.y);
+	this.pic.context.lineTo(line4.x, line4.y);
+	this.pic.context.lineTo(line5.x, line5.y);
 	
-	if(this.toolbar.brush == "dot") 
-	  this.pic.context.lineCap = 'round';
-	else this.pic.context.lineCap = 'square';
+	this.pic.context.lineTo(line10.x, line10.y);
+	this.pic.context.lineTo(line9.x, line9.y);
+	this.pic.context.lineTo(line8.x, line8.y);
+	this.pic.context.lineTo(line7.x, line7.y);
+	this.pic.context.lineTo(line6.x, line6.y);
+	this.pic.context.lineTo(line0.x,line0.y);
+	this.pic.context.lineTo(line1.x,line1.y); //do ostrego wierzchołka
+
 	
+	this.pic.context.lineWidth = toolbar.starBorderSize;
+	
+	this.pic.context.fillStyle = toolbar.starFillColor;
+	this.pic.context.fill();
+	
+	this.pic.context.strokeStyle = toolbar.starBorderColor;
+	this.pic.context.lineCap = 'butt';
 	this.pic.context.stroke();
-  }
+
+      }
+      else if(shape == "triangle") {
+	size = parseInt(document.getElementById("triangleSize").value);
+ 	y -= (size/2);
+	line0 = {'x': x, 'y':y}; 
+	line1 = {'x': x+(size/2), 'y': y+(size*0.75)}; 
+	line2 = {'x': x-(size/2), 'y': y+(size*0.75)}; 
+
+	
+	this.pic.context.beginPath();
+	this.pic.context.moveTo(line0.x,line0.y);
+	this.pic.context.lineTo(line1.x,line1.y);
+	this.pic.context.lineTo(line2.x, line2.y);
+	this.pic.context.lineTo(line0.x,line0.y);
+
+	this.pic.context.closePath();
+	this.pic.context.lineWidth = toolbar.triangleBorderSize;
+
+	this.pic.context.fillStyle = toolbar.triangleFillColor;
+	this.pic.context.fill();
+	this.pic.context.strokeStyle =  toolbar.triangleBorderColor;
+	this.pic.context.stroke();
+
+
+	
+      } else if (shape == "circle") {
+	radius = parseInt(document.getElementById("circleRadius").value);
+	
+	border = toolbar.circleBorderSize;
+	this.pic.context.beginPath();
+	this.pic.context.strokeStyle = toolbar.circleBorderColor;
+ 	this.pic.context.lineWidth = border;
+	this.pic.context.arc(x,y, radius, 0, 2*Math.PI, true);
+ 	this.pic.context.closePath();
+	this.pic.context.stroke();
+	
+ 	this.pic.context.beginPath();
+
+	radius -= (border/2); 
+	this.pic.context.lineWidth = 0;
+	this.pic.context.arc(x,y, radius, 0, 2*Math.PI, true);
+	this.pic.context.fillStyle = toolbar.circleFillColor;
+
+	this.pic.context.closePath();
+	this.pic.context.fill();
+	this.pic.context.closePath();
+	
+	
+      } else if (shape == "rectangle") {
+	width = parseInt(document.getElementById("rectWidth").value);
+	height = parseInt(document.getElementById("rectHeight").value);
+
+	x = x-(width/2);
+	y = y-(height/2);
+	this.pic.context.beginPath();
+	this.pic.context.fillStyle = toolbar.rectFillColor;
+	borderWidth = toolbar.rectBorderSize;
+	this.pic.context.fillRect(x+(borderWidth/2),y+(borderWidth/2), width-borderWidth, height-borderWidth);
+
+ 	
+	this.pic.context.lineWidth = toolbar.rectBorderSize;
+	this.pic.context.strokeStyle = toolbar.rectBorderColor;
+	this.pic.context.strokeRect(x, y, width, height);
+ 	this.pic.context.closePath();
+
+	this.pic.context.stroke();
+      }
+      
+      
+ }
  
  
  /* ### filters */
@@ -188,6 +353,7 @@ var Piqo = function(dialogs, toolbar) {
 
   }
   
+
 }
 
 
@@ -200,9 +366,56 @@ function paintInit(painting) {
   //******   KONIECZNA IMPLEMENTACJA TRYBU - JEŚLI TRYB NIE JEST MALUJ, NIE POZWALAĆ MALOWAĆ!!! ***/
   canvas = document.getElementById("Picture");
   
-    canvas.onmousedown = function(e) { painting.draw(e);
-      canvas.onmousemove = function(e) {painting.draw(e);}
-      canvas.onmouseup = function() {canvas.onmousemove = function() {}}
-      canvas.onmouseout = function() {canvas.onmousemove = function() {}}
+  if(painting.mode == "brush") {
+    canvas.onclick = false;
+    density = 100 - parseInt(document.getElementById("brushDensityPanel").value);
+    
+    delay = density*2;
+
+    if(density) {
+        canvas.onmousedown = function(e) { 
+	// optymalizacja - przeniesione z painting.draw()
+	    ////////////////////////////////////
+
+
+	painting.delayedDraw(e);
+
+
+	canvas.onmousemove = function(e) {
+	  
+	    if(delay==0) {
+	      painting.delayedDraw(e);
+	      delay = density*2;
+	    } else {
+	      delay -= 10;
+	      console.log(delay);
+	    }
+	}
+	canvas.onmouseup = function() {canvas.onmousemove = function() {}}
+	canvas.onmouseout = function() {canvas.onmousemove = function() {}}
+	}
+    } else {  
+      canvas.onmousedown = function(e) { 
+	// optymalizacja - przeniesione z painting.draw()
+	  piqo.pic.context.beginPath();
+	  piqo.pic.context.moveTo(e.pageX - canvas.offsetLeft, e.pageY - canvas.offsetTop);
+	    ////////////////////////////////////
+	  painting.draw(e, density);
+
+	canvas.onmousemove = function(e) {painting.draw(e, density);}
+	canvas.onmouseup = function() {canvas.onmousemove = function() {}}
+	canvas.onmouseout = function() {canvas.onmousemove = function() {}}
+      }
     }
+  }
+   else if (painting.mode == "shape") {
+     
+     canvas.onmousedown = false;
+     canvas.onclick = function(e) {
+      painting.drawShape(e); 
+     }
+     
+   } else {
+     dialogs.problem("unknown painting tool selected");
+   }
 }

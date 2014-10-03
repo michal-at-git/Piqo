@@ -31,16 +31,73 @@
     <button class="minimalize" onclick="piqo.fullscreen()" style="/*temp*/ margin-right: 30px;">fullscreen</button>
 
     <section class="toolbox">
-    <h2>Brush tools</h2>
-      <p>color:
-      <input type="color" id="color" value="#000000" onchange="toolbar.changeColor()" /></p>
-      
-      <p>Line width:<br/>
-      <input type="range" min="1" max="50" step="1" id="brushSizePanel" value="10" onchange="toolbar.changeBrushSize()" /> <span id="brushSizeInfo">25px</span></p>
-      <p>brush: <select id="brush" onchange="toolbar.changeBrush()">
-	<option value="dot"> &#9899; </option>
-	<option value="line"> &#9866; </option>
+    <h2>Painting tools</h2>
+    <!-- fix for ff autocomplete -->
+    <form autocomplete="off" class="paintingToolSelect"><p><label>Brush: <input type="radio" name="pTool"  onclick="piqo.setMode('brush')" checked /></label>
+    <label>Shape: <input type="radio" name="pTool"  onclick="piqo.setMode('shape')" value="0" /></label></p></form>
+
+      <section id="brush_tools">
+	<h3>Brush tools</h3>
+	<p>color:
+	<input type="color" autocomplete="off" id="color"   value="#000000" onchange="toolbar.changeColor()" /></p>
+	<p>Density:<br/>
+	<input type="range" max="100" min="0" step="10" id="brushDensityPanel" onchange="toolbar.densityUpdate()" value="100"  autocomplete="off"/><span id="brushDensityInfo">100%</span> 
+	</p>
+	<p>Transparency:<br/>
+	<input type="range" id="brushTransparency" max="1" min="0.1" value="1.0" step="0.1" onchange="toolbar.changeColor()" autocomplete="off" /> <span id="brushTransparencyInfo">0%</span></p>
+	<p>Line width:<br/>
+	<input type="range" min="1" max="50" step="1" id="brushSizePanel" value="10" onchange="toolbar.changeBrushSize()" autocomplete="off" /> <span id="brushSizeInfo">25px</span></p>
+	<p>Brush: <select id="brush" onchange="toolbar.changeBrush()">
+	  <option value="dot"> &#9899; </option>
+	  <option value="line"> &#9866; </option>
+	  </select></p>
+      </section>
+      <section id="shape_tools">
+	<h3>Shapes</h3>
+	<p><select id="shapeSelector" onchange="toolbar.showShapeTool()">
+	<option value="rectangle">&#9633;</option>
+	<option value="circle">&#9675;</option>
+	<option value="star">&#9734;</option>
+	<option value="triangle">&#9651;</option>
 	</select></p>
+	<section id="rectangleShape">
+	  <h4>Rectangle</h4>
+	  <p>width: <input type="number" id="rectWidth" min="10" max="300" value="10"  autocomplete="off"/></p> 
+	  <p>height: <input type="number" min="10" id="rectHeight" max="300" value="10"  autocomplete="off"/></p>
+	  <p>Border size: <input type="range" id="rectBorderSizePanel" onchange="toolbar.changeRectBorderSize()" min="0" max="15" value="1"  autocomplete="off"/> <span id="rectBorderSizeInfo">1px</span></p>
+	  <p>Border color: <input type="color" id="rectBorderColor" onchange="toolbar.changeRectBorderColor()" value="#000000"  autocomplete="off" /></p>
+	  <p>Border transparency: <input type="range" id="rectBorderTransparency" onChange="toolbar.changeRectBorderColor()" max="1" min="0" value="1.0" step="0.1" autocomplete="off" /> <span id="rectBorderTransparencyInfo">0%</span></p>
+	  <p>Fill color: <input type="color" id="rectFillColor" onchange="toolbar.changeRectFillColor()" value="#ffffff"  autocomplete="off"/></p>
+	  <p>Fill transparency: <input type="range" id="rectFillTransparency" onchange="toolbar.changeRectFillColor()" max="1" min="0" value="1.0" step="0.1" autocomplete="off" /> <span id="rectFillTransparencyInfo">0%</span></p>
+	</section>
+	<section id="circleShape">
+	  <h4>Circle</h4>
+	  <p>radius: <input type="number" id="circleRadius" min="10" max="150" value="10"/></p> 
+	  <p>Border size: <input type="range" min="1" id="circleBorderSize" max="15" onchange="toolbar.changeCircleBorderSize()"  autocomplete="off" value="1"/> <span id="circleBorderSizeInfo">1px</span></p>
+	  <p>Border color: <input type="color" id="circleBorderColor" onChange="toolbar.changeCircleBorderColor()" value="#000000"  autocomplete="off"/></p>
+	  <p>Border transparency: <input type="range" max="1" min="0.1"  id="circleBorderTransparency" onChange="toolbar.changeCircleBorderColor()"  value="1.0" step="0.1" autocomplete="off" /> <span id="circleBorderTransparencyInfo">0%</span></p>
+	  <p>Fill color: <input type="color" id="circleFillColor" onchange="toolbar.changeCircleFillColor()"  value="#ffffff"  autocomplete="off"/></p>
+	  <p>Fill transparency: <input type="range" max="1" min="0.1" id="circleFillTransparency" onchange="toolbar.changeCircleFillColor()" value="1.0" step="0.1" autocomplete="off" /> <span id="circleFillTransparencyInfo">0%</span></p>
+	</section>
+	<section id="triangleShape">
+	  <h4>Triangle</h4>
+	  <p>Size: <input type="number" id="triangleSize" min="10" max="150" value="10"/></p> 
+	  <p>Border size: <input type="range" min="0" id="triangleBorderSize" max="15"  onchange="toolbar.changeTriangleBorderSize()" value="1"  autocomplete="off"/> <span id="triangleBorderSizeInfo">1px</span></p>
+	  <p>Border color: <input type="color" id="triangleBorderColor" onChange="toolbar.changeTriangleBorderColor()" value="#000000"  autocomplete="off" /></p>
+	  <p>Border transparency: <input type="range" max="1" min="0.1"  id="triangleBorderTransparency" onChange="toolbar.changeTriangleBorderColor()"  value="1.0" step="0.1" autocomplete="off" /> <span id="triangleBorderTransparencyInfo">0%</span></p>
+	  <p>Fill color: <input type="color" id="triangleFillColor" onchange="toolbar.changeTriangleFillColor()"  value="#ffffff"  autocomplete="off"/></p>
+	  <p>Fill transparency: <input type="range" max="1" min="0.1" id="triangleFillTransparency" onchange="toolbar.changeTriangleFillColor()" value="1.0" step="0.1" autocomplete="off" /> <span id="triangleFillTransparencyInfo">0%</span></p>
+	</section>
+	<section id="starShape">
+	  <h4>Star</h4>
+	  <p>Size: <input type="number" id="starSize" min="20" max="150" value="20"/></p> 
+	  <p>Border size: <input type="range" min="0" id="starBorderSize" max="15" onchange="toolbar.changeStarBorderSize()" value="1"  autocomplete="off"/> <span id="starBorderSizeInfo">1px</span></p>
+	  <p>Border color: <input type="color" id="starBorderColor" onChange="toolbar.changeStarBorderColor()" value="#000000"  autocomplete="off"/></p>
+	  <p>Border transparency: <input type="range" max="1" min="0.1"  id="starBorderTransparency" onChange="toolbar.changeStarBorderColor()"  value="1.0" step="0.1" autocomplete="off" /> <span id="starBorderTransparencyInfo">0%</span></p>
+	  <p>Fill color: <input type="color" id="starFillColor" onchange="toolbar.changeStarFillColor()"  value="#ffffff"  autocomplete="off"/></p>
+	  <p>Fill transparency: <input type="range" max="1" min="0.1" id="starFillTransparency" onchange="toolbar.changeStarFillColor()" value="1.0" step="0.1" autocomplete="off" /> <span id="starFillTransparencyInfo">0%</span></p>
+	</section>
+      </section>
     </section>
     <section class="toolbox">
       <h2>Filters</h2>
@@ -52,6 +109,8 @@
     </section>
     <section class="toolbox">
       <h2>Image properties</h2>
+      <p><button onclick="newPic()">new image</button></p>
+      <p><button onclick="piqo.clear()">clear canvas</button></p>      
       <p><button onclick="dialogs.scaleImageDialog()">scale image</button></p>
       <p><button onclick="dialogs.exportImageDialog(piqo)">export image</button></p>
 
@@ -60,19 +119,7 @@
 <div id="dialog">
 </div> 
   <canvas id="Picture" width="0" height="0">
-  </canvas>
-
- 
-     
- <script>
-//   dialogs = new Dialogs();
-//   toolbar = new Toolbar();
-//   piqo = new Piqo(dialogs, toolbar);
-  
-
-  </script>
-
-    
+  </canvas>   
 <footer id="footer"><button class="maximalize" onclick="toolbar.maximalize()">&#9652;</button></footer>
  
 </body>
